@@ -1,0 +1,23 @@
+# Supabase Postgres (DEV) - copy to application.properties or use as a profile
+
+# Database Connection Settings
+db.url=jdbc:postgresql://<DB_HOST>:5432/<DB_NAME>?sslmode=require
+db.user=<DB_USER>
+db.password=<DB_PASSWORD>
+db.driver=org.postgresql.Driver
+
+# Supabase API (optional, for Storage/Auth integration)
+supabase.url=<SUPABASE_URL>
+supabase.anon.key=<SUPABASE_ANON_KEY>
+supabase.service.key=<SUPABASE_SERVICE_ROLE_KEY>
+supabase.bucket=photos
+
+# Connection Pool Settings (not used by DBConnection, reserved for future)
+db.pool.initialSize=5
+db.pool.maxActive=10
+db.pool.maxIdle=5
+db.pool.minIdle=2
+
+# App Settings
+app.title=Baltimore Metal Crafters
+app.version=1.0.0

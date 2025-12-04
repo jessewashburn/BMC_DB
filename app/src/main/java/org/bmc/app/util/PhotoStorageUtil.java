@@ -72,13 +72,31 @@ public class PhotoStorageUtil {
                 : "";
             String newFilename = String.format("job%d_%s%s%s", jobId, sanitizedDesc, timestamp, extension);
             
-            // Copy file to destination
+            // If Supabase is configured, upload there and return public URL
+            SupabaseStorageClient supa = SupabaseStorageClient.fromProperties();
+            if (supa != null) {
+                String objPath = String.format("jobs/%d/%s", jobId, newFilename);
+                String contentType = switch (extension.toLowerCase()) {
+                    case ".jpg", ".jpeg" -> "image/jpeg";
+                    case ".png" -> "image/png";
+                    case ".gif" -> "image/gif";
+                    case ".bmp" -> "image/bmp";
+                    default -> "application/octet-stream";
+                };
+                try {
+                    String publicUrl = supa.uploadPublic(sourceFile, objPath, contentType);
+                    LOGGER.info("Photo uploaded to Supabase: " + publicUrl);
+                    return publicUrl; // store URL directly when bucket is public
+                } catch (Exception ex) {
+                    LOGGER.warning("Supabase upload failed, falling back to local save: " + ex.getMessage());
+                }
+            }
+
+            // Fallback: copy file to local destination
             Path destinationPath = jobDir.resolve(newFilename);
             Files.copy(sourceFile.toPath(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
-            
-            // Return relative path
             String relativePath = PHOTOS_BASE_DIR + "/job_" + jobId + "/" + newFilename;
-            LOGGER.info("Photo saved: " + relativePath);
+            LOGGER.info("Photo saved locally: " + relativePath);
             return relativePath;
             
         } catch (IOException e) {

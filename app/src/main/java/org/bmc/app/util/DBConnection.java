@@ -61,8 +61,8 @@ public class DBConnection {
             LOGGER.log(Level.SEVERE, "Error loading configuration file", e);
             throw new RuntimeException("Failed to load database configuration", e);
         } catch (ClassNotFoundException e) {
-            LOGGER.log(Level.SEVERE, "MySQL JDBC driver not found", e);
-            throw new RuntimeException("MySQL JDBC driver not found in classpath", e);
+            LOGGER.log(Level.SEVERE, "JDBC driver not found", e);
+            throw new RuntimeException("JDBC driver not found in classpath", e);
         }
     }
     

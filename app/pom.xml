@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>Baltimore Metal Crafters DB App</name>
-    <description>A Java Swing application backed by MySQL for managing a custom metal restoration shop</description>
+    <description>A Java Swing application backed by Postgres/Supabase for managing a custom metal restoration shop</description>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -19,11 +19,11 @@
     </properties>
 
     <dependencies>
-        <!-- MySQL JDBC Driver -->
+        <!-- PostgreSQL JDBC Driver -->
         <dependency>
-            <groupId>com.mysql</groupId>
-            <artifactId>mysql-connector-j</artifactId>
-            <version>8.2.0</version>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
         </dependency>
 
         <!-- JUnit for testing -->
