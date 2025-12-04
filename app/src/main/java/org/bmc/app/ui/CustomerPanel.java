@@ -5,6 +5,7 @@ import org.bmc.app.model.Customer;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +23,7 @@ public class CustomerPanel extends JPanel {
     private DefaultTableModel tableModel;
     private JTextField searchField;
     private JButton addButton, editButton, deleteButton, refreshButton;
+    private TableRowSorter<DefaultTableModel> sorter;
     
     public CustomerPanel() {
         this.customerDAO = new CustomerDAO();
@@ -95,6 +97,9 @@ public class CustomerPanel extends JPanel {
         
         customerTable = new JTable(tableModel);
         customerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        customerTable.setAutoCreateRowSorter(true);
+        sorter = new TableRowSorter<>(tableModel);
+        customerTable.setRowSorter(sorter);
         customerTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 boolean hasSelection = customerTable.getSelectedRow() != -1;

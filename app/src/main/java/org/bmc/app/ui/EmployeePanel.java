@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.bmc.app.dao.EmployeeDAO;
 import org.bmc.app.model.Employee;
@@ -33,6 +34,7 @@ public class EmployeePanel extends JPanel {
     private DefaultTableModel tableModel;
     private JComboBox<String> roleFilter;
     private JButton addButton, editButton, deleteButton, refreshButton;
+    private TableRowSorter<DefaultTableModel> sorter;
     
     public EmployeePanel() {
         this.employeeDAO = new EmployeeDAO();
@@ -103,6 +105,9 @@ public class EmployeePanel extends JPanel {
         
         employeeTable = new JTable(tableModel);
         employeeTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        employeeTable.setAutoCreateRowSorter(true);
+        sorter = new TableRowSorter<>(tableModel);
+        employeeTable.setRowSorter(sorter);
         employeeTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 boolean hasSelection = employeeTable.getSelectedRow() != -1;

@@ -18,6 +18,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.bmc.app.dao.InvoiceDAO;
 import org.bmc.app.model.Invoice;
@@ -33,6 +34,7 @@ public class InvoicePanel extends JPanel {
     private DefaultTableModel tableModel;
     private JComboBox<String> paymentStatusFilter;
     private JButton addButton, editButton, deleteButton, refreshButton, markPaidButton;
+    private TableRowSorter<DefaultTableModel> sorter;
     
     public InvoicePanel() {
         this.invoiceDAO = new InvoiceDAO();
@@ -108,6 +110,9 @@ public class InvoicePanel extends JPanel {
         
         invoiceTable = new JTable(tableModel);
         invoiceTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        invoiceTable.setAutoCreateRowSorter(true);
+        sorter = new TableRowSorter<>(tableModel);
+        invoiceTable.setRowSorter(sorter);
         invoiceTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 boolean hasSelection = invoiceTable.getSelectedRow() != -1;

@@ -7,6 +7,7 @@ import org.bmc.app.model.Job;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.util.List;
 import java.util.logging.Logger;
@@ -21,6 +22,7 @@ public class JobPanel extends JPanel {
     private JobMaterialDAO jobMaterialDAO;
     private JTable jobTable;
     private DefaultTableModel tableModel;
+    private TableRowSorter<DefaultTableModel> sorter;
     private JComboBox<String> statusFilter;
     private JTextField customerFilter;
     private JButton addButton, editButton, deleteButton, refreshButton, manageMaterialsButton, viewPhotosButton;
@@ -115,6 +117,9 @@ public class JobPanel extends JPanel {
         
         jobTable = new JTable(tableModel);
         jobTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jobTable.setAutoCreateRowSorter(true);
+        sorter = new TableRowSorter<>(tableModel);
+        jobTable.setRowSorter(sorter);
         jobTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
                 boolean hasSelection = jobTable.getSelectedRow() != -1;
