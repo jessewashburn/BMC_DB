@@ -16,6 +16,7 @@ C:\Users\jesse\BMC_DB\app\src\main\java\org\bmc\app\ui\PhotoViewerDialog.java
 C:\Users\jesse\BMC_DB\app\src\main\java\org\bmc\app\model\Invoice.java
 C:\Users\jesse\BMC_DB\app\src\main\java\org\bmc\app\model\POItem.java
 C:\Users\jesse\BMC_DB\app\src\main\java\org\bmc\app\dao\JobDAO.java
+C:\Users\jesse\BMC_DB\app\src\main\java\org\bmc\app\util\SupabaseStorageClient.java
 C:\Users\jesse\BMC_DB\app\src\main\java\org\bmc\app\ui\JobPanel.java
 C:\Users\jesse\BMC_DB\app\src\main\java\org\bmc\app\util\PhotoStorageUtil.java
 C:\Users\jesse\BMC_DB\app\src\main\java\org\bmc\app\model\Vendor.java

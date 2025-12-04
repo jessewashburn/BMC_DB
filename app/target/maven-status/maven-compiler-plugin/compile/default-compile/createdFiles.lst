@@ -78,4 +78,5 @@ org\bmc\app\ui\PurchaseOrderDialog$2.class
 org\bmc\app\util\DBConnection.class
 org\bmc\app\ui\ReportsPanel$2.class
 org\bmc\app\model\Job$Status.class
+org\bmc\app\util\SupabaseStorageClient.class
 org\bmc\app\ui\EmployeePanel.class

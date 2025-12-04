@@ -26,18 +26,18 @@ public class JobDAO {
     
     // SQL Queries
     private static final String INSERT_SQL = 
-        "INSERT INTO Job (customer_id, quote_id, description, start_date, due_date, status, estimated_labor_cost, estimated_material_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        "INSERT INTO job (customer_id, quote_id, description, start_date, due_date, status, estimated_labor_cost, estimated_material_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     
     private static final String SELECT_BY_ID_SQL = 
         "SELECT j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, " +
         "c.name as customer_name, " +
         "COALESCE(SUM(m.unit_cost * jm.quantity_used), 0) + COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) as estimated_value " +
-        "FROM Job j " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
-        "LEFT JOIN JobMaterial jm ON j.job_id = jm.job_id " +
-        "LEFT JOIN Material m ON jm.material_id = m.material_id " +
-        "LEFT JOIN WorkLog w ON j.job_id = w.job_id " +
-        "LEFT JOIN Employee e ON w.employee_id = e.employee_id " +
+        "FROM job j " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
+        "LEFT JOIN jobmaterial jm ON j.job_id = jm.job_id " +
+        "LEFT JOIN material m ON jm.material_id = m.material_id " +
+        "LEFT JOIN worklog w ON j.job_id = w.job_id " +
+        "LEFT JOIN employee e ON w.employee_id = e.employee_id " +
         "WHERE j.job_id = ? " +
         "GROUP BY j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, c.name";
     
@@ -45,32 +45,32 @@ public class JobDAO {
         "SELECT j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, " +
         "c.name as customer_name, " +
         "COALESCE(SUM(m.unit_cost * jm.quantity_used), 0) + COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) as estimated_value " +
-        "FROM Job j " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
-        "LEFT JOIN JobMaterial jm ON j.job_id = jm.job_id " +
-        "LEFT JOIN Material m ON jm.material_id = m.material_id " +
-        "LEFT JOIN WorkLog w ON j.job_id = w.job_id " +
-        "LEFT JOIN Employee e ON w.employee_id = e.employee_id " +
+        "FROM job j " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
+        "LEFT JOIN jobmaterial jm ON j.job_id = jm.job_id " +
+        "LEFT JOIN material m ON jm.material_id = m.material_id " +
+        "LEFT JOIN worklog w ON j.job_id = w.job_id " +
+        "LEFT JOIN employee e ON w.employee_id = e.employee_id " +
         "GROUP BY j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, c.name " +
         "ORDER BY j.due_date, j.job_id";
     
     private static final String UPDATE_SQL = 
-        "UPDATE Job SET customer_id = ?, quote_id = ?, description = ?, start_date = ?, due_date = ?, status = ?, estimated_labor_cost = ?, estimated_material_cost = ? " +
+        "UPDATE job SET customer_id = ?, quote_id = ?, description = ?, start_date = ?, due_date = ?, status = ?, estimated_labor_cost = ?, estimated_material_cost = ? " +
         "WHERE job_id = ?";
     
     private static final String DELETE_SQL = 
-        "DELETE FROM Job WHERE job_id = ?";
+        "DELETE FROM job WHERE job_id = ?";
     
     private static final String SELECT_BY_STATUS_SQL = 
         "SELECT j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, " +
         "c.name as customer_name, " +
         "COALESCE(SUM(m.unit_cost * jm.quantity_used), 0) + COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) as estimated_value " +
-        "FROM Job j " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
-        "LEFT JOIN JobMaterial jm ON j.job_id = jm.job_id " +
-        "LEFT JOIN Material m ON jm.material_id = m.material_id " +
-        "LEFT JOIN WorkLog w ON j.job_id = w.job_id " +
-        "LEFT JOIN Employee e ON w.employee_id = e.employee_id " +
+        "FROM job j " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
+        "LEFT JOIN jobmaterial jm ON j.job_id = jm.job_id " +
+        "LEFT JOIN material m ON jm.material_id = m.material_id " +
+        "LEFT JOIN worklog w ON j.job_id = w.job_id " +
+        "LEFT JOIN employee e ON w.employee_id = e.employee_id " +
         "WHERE j.status = ? " +
         "GROUP BY j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, c.name " +
         "ORDER BY j.due_date";
@@ -79,12 +79,12 @@ public class JobDAO {
         "SELECT j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, " +
         "c.name as customer_name, " +
         "COALESCE(SUM(m.unit_cost * jm.quantity_used), 0) + COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) as estimated_value " +
-        "FROM Job j " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
-        "LEFT JOIN JobMaterial jm ON j.job_id = jm.job_id " +
-        "LEFT JOIN Material m ON jm.material_id = m.material_id " +
-        "LEFT JOIN WorkLog w ON j.job_id = w.job_id " +
-        "LEFT JOIN Employee e ON w.employee_id = e.employee_id " +
+        "FROM job j " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
+        "LEFT JOIN jobmaterial jm ON j.job_id = jm.job_id " +
+        "LEFT JOIN material m ON jm.material_id = m.material_id " +
+        "LEFT JOIN worklog w ON j.job_id = w.job_id " +
+        "LEFT JOIN employee e ON w.employee_id = e.employee_id " +
         "WHERE j.customer_id = ? " +
         "GROUP BY j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, c.name " +
         "ORDER BY j.start_date DESC";
@@ -93,13 +93,13 @@ public class JobDAO {
         "SELECT j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, " +
         "c.name as customer_name, " +
         "COALESCE(SUM(m.unit_cost * jm.quantity_used), 0) + COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) as estimated_value " +
-        "FROM Job j " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
-        "LEFT JOIN JobMaterial jm ON j.job_id = jm.job_id " +
-        "LEFT JOIN Material m ON jm.material_id = m.material_id " +
-        "LEFT JOIN WorkLog w ON j.job_id = w.job_id " +
-        "LEFT JOIN Employee e ON w.employee_id = e.employee_id " +
-        "WHERE j.status IN ('Planned', 'InProgress') AND j.due_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL ? DAY) " +
+        "FROM job j " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
+        "LEFT JOIN jobmaterial jm ON j.job_id = jm.job_id " +
+        "LEFT JOIN material m ON jm.material_id = m.material_id " +
+        "LEFT JOIN worklog w ON j.job_id = w.job_id " +
+        "LEFT JOIN employee e ON w.employee_id = e.employee_id " +
+        "WHERE j.status IN ('Planned', 'InProgress') AND j.due_date BETWEEN CURRENT_DATE AND (CURRENT_DATE + (? || ' days')::interval) " +
         "GROUP BY j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, c.name " +
         "ORDER BY j.due_date";
     
@@ -107,24 +107,24 @@ public class JobDAO {
         "SELECT j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, " +
         "c.name as customer_name, " +
         "COALESCE(SUM(m.unit_cost * jm.quantity_used), 0) + COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) as estimated_value " +
-        "FROM Job j " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
-        "LEFT JOIN JobMaterial jm ON j.job_id = jm.job_id " +
-        "LEFT JOIN Material m ON jm.material_id = m.material_id " +
-        "LEFT JOIN WorkLog w ON j.job_id = w.job_id " +
-        "LEFT JOIN Employee e ON w.employee_id = e.employee_id " +
-        "WHERE j.status IN ('Planned', 'InProgress') AND j.due_date < CURDATE() " +
+        "FROM job j " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
+        "LEFT JOIN jobmaterial jm ON j.job_id = jm.job_id " +
+        "LEFT JOIN material m ON jm.material_id = m.material_id " +
+        "LEFT JOIN worklog w ON j.job_id = w.job_id " +
+        "LEFT JOIN employee e ON w.employee_id = e.employee_id " +
+        "WHERE j.status IN ('Planned', 'InProgress') AND j.due_date < CURRENT_DATE " +
         "GROUP BY j.job_id, j.customer_id, j.quote_id, j.description, j.start_date, j.due_date, j.status, j.estimated_labor_cost, j.estimated_material_cost, c.name " +
         "ORDER BY j.due_date";
     
     private static final String COUNT_RELATED_RECORDS_SQL = 
         "SELECT " +
-        "(SELECT COUNT(*) FROM Invoice WHERE job_id = ?) + " +
-        "(SELECT COUNT(*) FROM WorkLog WHERE job_id = ?) + " +
-        "(SELECT COUNT(*) FROM JobMaterial WHERE job_id = ?) + " +
-        "(SELECT COUNT(*) FROM Notes WHERE job_id = ?) + " +
-        "(SELECT COUNT(*) FROM Photo WHERE job_id = ?) + " +
-        "(SELECT COUNT(*) FROM Shipment WHERE job_id = ?) as total_count";
+        "(SELECT COUNT(*) FROM invoice WHERE job_id = ?) + " +
+        "(SELECT COUNT(*) FROM worklog WHERE job_id = ?) + " +
+        "(SELECT COUNT(*) FROM jobmaterial WHERE job_id = ?) + " +
+        "(SELECT COUNT(*) FROM notes WHERE job_id = ?) + " +
+        "(SELECT COUNT(*) FROM photo WHERE job_id = ?) + " +
+        "(SELECT COUNT(*) FROM shipment WHERE job_id = ?) as total_count";
     
     /**
      * Creates a new job in the database

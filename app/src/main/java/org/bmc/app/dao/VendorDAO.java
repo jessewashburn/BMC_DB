@@ -21,7 +21,7 @@ public class VendorDAO {
     public List<Vendor> findAll() {
         List<Vendor> vendors = new ArrayList<>();
         String sql = "SELECT vendor_id, name, contact_info, phone, email " +
-                     "FROM Vendor ORDER BY name";
+                 "FROM vendor ORDER BY name";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -39,7 +39,7 @@ public class VendorDAO {
 
     public Vendor findById(Integer id) {
         String sql = "SELECT vendor_id, name, contact_info, phone, email " +
-                     "FROM Vendor WHERE vendor_id = ?";
+                 "FROM vendor WHERE vendor_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

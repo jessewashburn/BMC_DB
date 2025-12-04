@@ -53,12 +53,12 @@ public class ReportDAO {
         List<JobDueSoonReport> jobs = new ArrayList<>();
         
         String sql = "SELECT j.job_id, c.name AS customer_name, j.description, " +
-                     "j.due_date, j.status " +
-                     "FROM Job j " +
-                     "JOIN Customer c ON j.customer_id = c.customer_id " +
-                     "WHERE j.status != 'Completed' " +
-                     "AND j.due_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY) " +
-                     "ORDER BY j.due_date ASC, c.name ASC";
+                 "j.due_date, j.status " +
+                 "FROM job j " +
+                 "JOIN customer c ON j.customer_id = c.customer_id " +
+                 "WHERE j.status != 'Completed' " +
+                 "AND j.due_date BETWEEN CURRENT_DATE AND (CURRENT_DATE + INTERVAL '7 days') " +
+                 "ORDER BY j.due_date ASC, c.name ASC";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -128,10 +128,10 @@ public class ReportDAO {
         String sql = "SELECT c.customer_id, c.name, c.phone, c.email, " +
                      "COUNT(DISTINCT j.job_id) AS job_count, " +
                      "COALESCE(SUM(i.total_amount), 0) AS total_revenue " +
-                     "FROM Customer c " +
-                     "INNER JOIN Job j ON c.customer_id = j.customer_id " +
-                     "LEFT JOIN Invoice i ON j.job_id = i.job_id " +
-                     "WHERE i.invoice_date >= DATE_SUB(CURDATE(), INTERVAL 90 DAY) " +
+                 "FROM customer c " +
+                 "INNER JOIN job j ON c.customer_id = j.customer_id " +
+                 "LEFT JOIN invoice i ON j.job_id = i.job_id " +
+                 "WHERE i.invoice_date >= (CURRENT_DATE - INTERVAL '90 days') " +
                      "GROUP BY c.customer_id, c.name, c.phone, c.email " +
                      "HAVING total_revenue > 0 " +
                      "ORDER BY total_revenue DESC, c.name ASC " +
@@ -207,9 +207,9 @@ public class ReportDAO {
                      "COALESCE(SUM(jm.quantity_used), 0) AS total_required, " +
                      "COUNT(DISTINCT j.job_id) AS active_jobs_affected, " +
                      "(COALESCE(SUM(jm.quantity_used), 0) - m.stock_quantity) AS shortage_amount " +
-                     "FROM Material m " +
-                     "INNER JOIN JobMaterial jm ON m.material_id = jm.material_id " +
-                     "INNER JOIN Job j ON jm.job_id = j.job_id " +
+                 "FROM material m " +
+                 "INNER JOIN jobmaterial jm ON m.material_id = jm.material_id " +
+                 "INNER JOIN job j ON jm.job_id = j.job_id " +
                      "WHERE j.status IN ('Planned', 'InProgress') " +
                      "GROUP BY m.material_id, m.name, m.category, m.stock_quantity " +
                      "HAVING shortage_amount > 0 " +
@@ -287,8 +287,8 @@ public class ReportDAO {
                      "COALESCE(SUM(w.hours_worked), 0) AS total_hours, " +
                      "COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) AS total_pay, " +
                      "COUNT(DISTINCT w.job_id) AS job_count " +
-                     "FROM Employee e " +
-                     "LEFT JOIN WorkLog w ON e.employee_id = w.employee_id " +
+                 "FROM employee e " +
+                 "LEFT JOIN worklog w ON e.employee_id = w.employee_id " +
                      "GROUP BY e.employee_id, e.name, e.role, e.hourly_rate " +
                      "ORDER BY total_hours DESC, e.name ASC";
         
@@ -327,8 +327,8 @@ public class ReportDAO {
                      "COALESCE(SUM(w.hours_worked), 0) AS total_hours, " +
                      "COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) AS total_pay, " +
                      "COUNT(DISTINCT w.job_id) AS job_count " +
-                     "FROM Employee e " +
-                     "LEFT JOIN WorkLog w ON e.employee_id = w.employee_id " +
+                 "FROM employee e " +
+                 "LEFT JOIN worklog w ON e.employee_id = w.employee_id " +
                      "WHERE e.employee_id = ? " +
                      "GROUP BY e.employee_id, e.name, e.role, e.hourly_rate";
         
@@ -400,12 +400,12 @@ public class ReportDAO {
         
         String sql = "SELECT i.invoice_id, i.job_id, c.name AS customer_name, " +
                      "j.description AS job_description, i.invoice_date, i.total_amount, " +
-                     "DATEDIFF(CURDATE(), i.invoice_date) AS days_outstanding " +
-                     "FROM Invoice i " +
-                     "JOIN Job j ON i.job_id = j.job_id " +
-                     "JOIN Customer c ON j.customer_id = c.customer_id " +
+                 "(CURRENT_DATE - i.invoice_date) AS days_outstanding " +
+                 "FROM invoice i " +
+                 "JOIN job j ON i.job_id = j.job_id " +
+                 "JOIN customer c ON j.customer_id = c.customer_id " +
                      "WHERE i.paid = FALSE " +
-                     "AND DATEDIFF(CURDATE(), i.invoice_date) > 30 " +
+                 "AND (CURRENT_DATE - i.invoice_date) > 30 " +
                      "ORDER BY days_outstanding DESC, i.invoice_date ASC";
         
         try (Connection conn = DBConnection.getConnection();
@@ -480,14 +480,14 @@ public class ReportDAO {
         List<VendorSpendingReport> spending = new ArrayList<>();
         
         String sql = "SELECT v.vendor_id, v.name AS vendor_name, v.contact_info, " +
-                     "YEAR(po.order_date) AS year, MONTH(po.order_date) AS month, " +
-                     "DATE_FORMAT(po.order_date, '%M') AS month_name, " +
+                 "EXTRACT(YEAR FROM po.order_date) AS year, EXTRACT(MONTH FROM po.order_date) AS month, " +
+                 "TO_CHAR(po.order_date, 'FMMonth') AS month_name, " +
                      "SUM(po.total_cost) AS total_spending, " +
                      "COUNT(po.po_id) AS purchase_order_count " +
-                     "FROM Vendor v " +
-                     "JOIN PurchaseOrder po ON v.vendor_id = po.vendor_id " +
+                 "FROM vendor v " +
+                 "JOIN purchaseorder po ON v.vendor_id = po.vendor_id " +
                      "WHERE po.status != 'Cancelled' " +
-                     "GROUP BY v.vendor_id, v.name, v.contact_info, YEAR(po.order_date), MONTH(po.order_date) " +
+                 "GROUP BY v.vendor_id, v.name, v.contact_info, EXTRACT(YEAR FROM po.order_date), EXTRACT(MONTH FROM po.order_date), TO_CHAR(po.order_date, 'FMMonth') " +
                      "ORDER BY year DESC, month DESC, total_spending DESC";
         
         try (Connection conn = DBConnection.getConnection();
@@ -601,12 +601,12 @@ public class ReportDAO {
             "    COALESCE(j.estimated_material_cost, 0) AS estimated_material_cost, " +
             "    COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) AS actual_labor_cost, " +
             "    COALESCE(SUM(jm.quantity_used * m.unit_cost), 0) AS actual_material_cost " +
-            "FROM Job j " +
-            "INNER JOIN Customer c ON j.customer_id = c.customer_id " +
-            "LEFT JOIN WorkLog w ON j.job_id = w.job_id " +
-            "LEFT JOIN Employee e ON w.employee_id = e.employee_id " +
-            "LEFT JOIN JobMaterial jm ON j.job_id = jm.job_id " +
-            "LEFT JOIN Material m ON jm.material_id = m.material_id " +
+            "FROM job j " +
+            "INNER JOIN customer c ON j.customer_id = c.customer_id " +
+            "LEFT JOIN worklog w ON j.job_id = w.job_id " +
+            "LEFT JOIN employee e ON w.employee_id = e.employee_id " +
+            "LEFT JOIN jobmaterial jm ON j.job_id = jm.job_id " +
+            "LEFT JOIN material m ON jm.material_id = m.material_id " +
             "GROUP BY j.job_id, c.name, j.description, j.status, j.estimated_labor_cost, j.estimated_material_cost " +
             "HAVING (j.estimated_labor_cost > 0 OR actual_labor_cost > 0 OR j.estimated_material_cost > 0 OR actual_material_cost > 0) " +
             "ORDER BY j.job_id";
@@ -729,10 +729,10 @@ public class ReportDAO {
             "    j.status, " +
             "    COALESCE(j.estimated_labor_cost, 0) AS estimated_labor_cost, " +
             "    COALESCE(SUM(w.hours_worked * e.hourly_rate), 0) AS actual_labor_cost " +
-            "FROM Job j " +
-            "INNER JOIN Customer c ON j.customer_id = c.customer_id " +
-            "LEFT JOIN WorkLog w ON j.job_id = w.job_id " +
-            "LEFT JOIN Employee e ON w.employee_id = e.employee_id " +
+            "FROM job j " +
+            "INNER JOIN customer c ON j.customer_id = c.customer_id " +
+            "LEFT JOIN worklog w ON j.job_id = w.job_id " +
+            "LEFT JOIN employee e ON w.employee_id = e.employee_id " +
             "GROUP BY j.job_id, c.name, j.description, j.status, j.estimated_labor_cost " +
             "HAVING estimated_labor_cost > 0 OR actual_labor_cost > 0 " +
             "ORDER BY j.job_id";
@@ -821,9 +821,9 @@ public class ReportDAO {
             "    COALESCE(SUM(i.total_amount), 0) AS total_revenue, " +
             "    MIN(j.start_date) AS first_job_date, " +
             "    MAX(j.start_date) AS last_job_date " +
-            "FROM Customer c " +
-            "INNER JOIN Job j ON c.customer_id = j.customer_id " +
-            "LEFT JOIN Invoice i ON j.job_id = i.job_id " +
+            "FROM customer c " +
+            "INNER JOIN job j ON c.customer_id = j.customer_id " +
+            "LEFT JOIN invoice i ON j.job_id = i.job_id " +
             "WHERE j.status = 'Completed' " +
             "GROUP BY c.customer_id, c.name " +
             "HAVING COUNT(j.job_id) > 3 " +

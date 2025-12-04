@@ -49,9 +49,9 @@ public class JobMaterialDAO {
         List<JobMaterialInfo> materials = new ArrayList<>();
         
         String sql = "SELECT jm.job_id, jm.material_id, jm.quantity_used, " +
-                     "m.name, m.category, m.stock_quantity " +
-                     "FROM JobMaterial jm " +
-                     "JOIN Material m ON jm.material_id = m.material_id " +
+                 "m.name, m.category, m.stock_quantity " +
+                 "FROM jobmaterial jm " +
+                 "JOIN material m ON jm.material_id = m.material_id " +
                      "WHERE jm.job_id = ? " +
                      "ORDER BY m.name ASC";
         
@@ -87,7 +87,7 @@ public class JobMaterialDAO {
      * Assign a material to a job
      */
     public boolean assignMaterial(int jobId, int materialId, int quantityUsed) {
-        String sql = "INSERT INTO JobMaterial (job_id, material_id, quantity_used) " +
+        String sql = "INSERT INTO jobmaterial (job_id, material_id, quantity_used) " +
                      "VALUES (?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection();
@@ -117,7 +117,7 @@ public class JobMaterialDAO {
      * Update the quantity of a material for a job
      */
     public boolean updateQuantity(int jobId, int materialId, int quantityUsed) {
-        String sql = "UPDATE JobMaterial SET quantity_used = ? " +
+        String sql = "UPDATE jobmaterial SET quantity_used = ? " +
                      "WHERE job_id = ? AND material_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
@@ -147,7 +147,7 @@ public class JobMaterialDAO {
      * Remove a material assignment from a job
      */
     public boolean removeMaterial(int jobId, int materialId) {
-        String sql = "DELETE FROM JobMaterial WHERE job_id = ? AND material_id = ?";
+        String sql = "DELETE FROM jobmaterial WHERE job_id = ? AND material_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

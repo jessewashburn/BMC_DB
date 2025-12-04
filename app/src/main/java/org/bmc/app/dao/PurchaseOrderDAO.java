@@ -23,9 +23,9 @@ public class PurchaseOrderDAO {
     public List<PurchaseOrder> findAll() {
         List<PurchaseOrder> purchaseOrders = new ArrayList<>();
         String sql = "SELECT po.po_id, po.vendor_id, v.name AS vendor_name, po.order_date, " +
-                     "po.total_cost, po.status " +
-                     "FROM PurchaseOrder po " +
-                     "JOIN Vendor v ON po.vendor_id = v.vendor_id " +
+                 "po.total_cost, po.status " +
+                 "FROM purchaseorder po " +
+                 "JOIN vendor v ON po.vendor_id = v.vendor_id " +
                      "ORDER BY po.order_date DESC";
         
         try (Connection conn = DBConnection.getConnection();
@@ -44,9 +44,9 @@ public class PurchaseOrderDAO {
 
     public PurchaseOrder findById(Integer id) {
         String sql = "SELECT po.po_id, po.vendor_id, v.name AS vendor_name, po.order_date, " +
-                     "po.total_cost, po.status " +
-                     "FROM PurchaseOrder po " +
-                     "JOIN Vendor v ON po.vendor_id = v.vendor_id " +
+                 "po.total_cost, po.status " +
+                 "FROM purchaseorder po " +
+                 "JOIN vendor v ON po.vendor_id = v.vendor_id " +
                      "WHERE po.po_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
@@ -64,7 +64,7 @@ public class PurchaseOrderDAO {
     }
 
     public boolean save(PurchaseOrder po) {
-        String sql = "INSERT INTO PurchaseOrder (vendor_id, order_date, total_cost, status) " +
+        String sql = "INSERT INTO purchaseorder (vendor_id, order_date, total_cost, status) " +
                      "VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection();
@@ -92,7 +92,7 @@ public class PurchaseOrderDAO {
     }
 
     public boolean update(PurchaseOrder po) {
-        String sql = "UPDATE PurchaseOrder SET vendor_id = ?, order_date = ?, total_cost = ?, " +
+        String sql = "UPDATE purchaseorder SET vendor_id = ?, order_date = ?, total_cost = ?, " +
                      "status = ? WHERE po_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
@@ -115,7 +115,7 @@ public class PurchaseOrderDAO {
     }
 
     public boolean delete(Integer id) {
-        String sql = "DELETE FROM PurchaseOrder WHERE po_id = ?";
+        String sql = "DELETE FROM purchaseorder WHERE po_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -134,10 +134,10 @@ public class PurchaseOrderDAO {
     public List<PurchaseOrder> search(String keyword) {
         List<PurchaseOrder> purchaseOrders = new ArrayList<>();
         String sql = "SELECT po.po_id, po.vendor_id, v.name AS vendor_name, po.order_date, " +
-                     "po.total_cost, po.status " +
-                     "FROM PurchaseOrder po " +
-                     "JOIN Vendor v ON po.vendor_id = v.vendor_id " +
-                     "WHERE v.name LIKE ? OR po.status LIKE ? OR CAST(po.po_id AS CHAR) LIKE ? " +
+                 "po.total_cost, po.status " +
+                 "FROM purchaseorder po " +
+                 "JOIN vendor v ON po.vendor_id = v.vendor_id " +
+                 "WHERE v.name ILIKE ? OR po.status ILIKE ? OR CAST(po.po_id AS TEXT) ILIKE ? " +
                      "ORDER BY po.order_date DESC";
         
         try (Connection conn = DBConnection.getConnection();
@@ -162,9 +162,9 @@ public class PurchaseOrderDAO {
     public List<PurchaseOrder> findByVendor(Integer vendorId) {
         List<PurchaseOrder> purchaseOrders = new ArrayList<>();
         String sql = "SELECT po.po_id, po.vendor_id, v.name AS vendor_name, po.order_date, " +
-                     "po.total_cost, po.status " +
-                     "FROM PurchaseOrder po " +
-                     "JOIN Vendor v ON po.vendor_id = v.vendor_id " +
+                 "po.total_cost, po.status " +
+                 "FROM purchaseorder po " +
+                 "JOIN vendor v ON po.vendor_id = v.vendor_id " +
                      "WHERE po.vendor_id = ? " +
                      "ORDER BY po.order_date DESC";
         

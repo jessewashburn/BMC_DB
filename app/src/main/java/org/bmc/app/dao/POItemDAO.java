@@ -22,9 +22,9 @@ public class POItemDAO {
     public List<POItem> findByPurchaseOrder(Integer poId) {
         List<POItem> items = new ArrayList<>();
         String sql = "SELECT poi.po_item_id, poi.po_id, poi.material_id, m.name AS material_name, " +
-                     "poi.quantity, poi.unit_price " +
-                     "FROM POItem poi " +
-                     "JOIN Material m ON poi.material_id = m.material_id " +
+                 "poi.quantity, poi.unit_price " +
+                 "FROM poitem poi " +
+                 "JOIN material m ON poi.material_id = m.material_id " +
                      "WHERE poi.po_id = ? " +
                      "ORDER BY poi.po_item_id";
         
@@ -45,9 +45,9 @@ public class POItemDAO {
 
     public POItem findById(Integer id) {
         String sql = "SELECT poi.po_item_id, poi.po_id, poi.material_id, m.name AS material_name, " +
-                     "poi.quantity, poi.unit_price " +
-                     "FROM POItem poi " +
-                     "JOIN Material m ON poi.material_id = m.material_id " +
+                 "poi.quantity, poi.unit_price " +
+                 "FROM poitem poi " +
+                 "JOIN material m ON poi.material_id = m.material_id " +
                      "WHERE poi.po_item_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
@@ -65,7 +65,7 @@ public class POItemDAO {
     }
 
     public boolean save(POItem item) {
-        String sql = "INSERT INTO POItem (po_id, material_id, quantity, unit_price) " +
+        String sql = "INSERT INTO poitem (po_id, material_id, quantity, unit_price) " +
                      "VALUES (?, ?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection();
@@ -93,7 +93,7 @@ public class POItemDAO {
     }
 
     public boolean update(POItem item) {
-        String sql = "UPDATE POItem SET material_id = ?, quantity = ?, unit_price = ? " +
+        String sql = "UPDATE poitem SET material_id = ?, quantity = ?, unit_price = ? " +
                      "WHERE po_item_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
@@ -115,7 +115,7 @@ public class POItemDAO {
     }
 
     public boolean delete(Integer id) {
-        String sql = "DELETE FROM POItem WHERE po_item_id = ?";
+        String sql = "DELETE FROM poitem WHERE po_item_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -132,7 +132,7 @@ public class POItemDAO {
     }
 
     public boolean deleteByPurchaseOrder(Integer poId) {
-        String sql = "DELETE FROM POItem WHERE po_id = ?";
+        String sql = "DELETE FROM poitem WHERE po_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

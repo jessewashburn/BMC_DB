@@ -23,19 +23,19 @@ public class PhotoDAO {
     
     // SQL Queries
     private static final String INSERT_SQL = 
-        "INSERT INTO Photo (job_id, file_path, description) VALUES (?, ?, ?)";
+        "INSERT INTO photo (job_id, file_path, description) VALUES (?, ?, ?)";
     
     private static final String SELECT_BY_JOB_SQL = 
-        "SELECT photo_id, job_id, file_path, description FROM Photo WHERE job_id = ? ORDER BY photo_id";
+        "SELECT photo_id, job_id, file_path, description FROM photo WHERE job_id = ? ORDER BY photo_id";
     
     private static final String SELECT_BY_ID_SQL = 
-        "SELECT photo_id, job_id, file_path, description FROM Photo WHERE photo_id = ?";
+        "SELECT photo_id, job_id, file_path, description FROM photo WHERE photo_id = ?";
     
     private static final String DELETE_SQL = 
-        "DELETE FROM Photo WHERE photo_id = ?";
+        "DELETE FROM photo WHERE photo_id = ?";
     
     private static final String DELETE_BY_JOB_SQL = 
-        "DELETE FROM Photo WHERE job_id = ?";
+        "DELETE FROM photo WHERE job_id = ?";
     
     /**
      * Creates a new photo record in the database

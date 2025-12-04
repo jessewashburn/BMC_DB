@@ -22,9 +22,9 @@ public class MaterialDAO {
     public List<Material> findAll() {
         List<Material> materials = new ArrayList<>();
         String sql = "SELECT m.material_id, m.name, m.category, m.stock_quantity, m.reorder_level, " +
-                     "m.unit_cost, m.vendor_id, v.name AS vendor_name " +
-                     "FROM Material m " +
-                     "LEFT JOIN Vendor v ON m.vendor_id = v.vendor_id " +
+                 "m.unit_cost, m.vendor_id, v.name AS vendor_name " +
+                 "FROM material m " +
+                 "LEFT JOIN vendor v ON m.vendor_id = v.vendor_id " +
                      "ORDER BY m.name";
         
         try (Connection conn = DBConnection.getConnection();
@@ -43,9 +43,9 @@ public class MaterialDAO {
 
     public Material findById(Integer id) {
         String sql = "SELECT m.material_id, m.name, m.category, m.stock_quantity, m.reorder_level, " +
-                     "m.unit_cost, m.vendor_id, v.name AS vendor_name " +
-                     "FROM Material m " +
-                     "LEFT JOIN Vendor v ON m.vendor_id = v.vendor_id " +
+                 "m.unit_cost, m.vendor_id, v.name AS vendor_name " +
+                 "FROM material m " +
+                 "LEFT JOIN vendor v ON m.vendor_id = v.vendor_id " +
                      "WHERE m.material_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
@@ -65,9 +65,9 @@ public class MaterialDAO {
     public List<Material> findLowStock() {
         List<Material> lowStockMaterials = new ArrayList<>();
         String sql = "SELECT m.material_id, m.name, m.category, m.stock_quantity, m.reorder_level, " +
-                     "m.unit_cost, m.vendor_id, v.name AS vendor_name " +
-                     "FROM Material m " +
-                     "LEFT JOIN Vendor v ON m.vendor_id = v.vendor_id " +
+                 "m.unit_cost, m.vendor_id, v.name AS vendor_name " +
+                 "FROM material m " +
+                 "LEFT JOIN vendor v ON m.vendor_id = v.vendor_id " +
                      "WHERE m.stock_quantity <= m.reorder_level " +
                      "ORDER BY m.stock_quantity";
         
@@ -86,7 +86,7 @@ public class MaterialDAO {
     }
 
     public boolean save(Material material) {
-        String sql = "INSERT INTO Material (name, category, stock_quantity, reorder_level, unit_cost, vendor_id) " +
+        String sql = "INSERT INTO material (name, category, stock_quantity, reorder_level, unit_cost, vendor_id) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DBConnection.getConnection();
@@ -120,7 +120,7 @@ public class MaterialDAO {
     }
 
     public boolean update(Material material) {
-        String sql = "UPDATE Material SET name = ?, category = ?, stock_quantity = ?, " +
+        String sql = "UPDATE material SET name = ?, category = ?, stock_quantity = ?, " +
                      "reorder_level = ?, unit_cost = ?, vendor_id = ? WHERE material_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
@@ -149,7 +149,7 @@ public class MaterialDAO {
     }
 
     public boolean delete(Integer id) {
-        String sql = "DELETE FROM Material WHERE material_id = ?";
+        String sql = "DELETE FROM material WHERE material_id = ?";
         
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -168,10 +168,10 @@ public class MaterialDAO {
     public List<Material> search(String keyword) {
         List<Material> materials = new ArrayList<>();
         String sql = "SELECT m.material_id, m.name, m.category, m.stock_quantity, m.reorder_level, " +
-                     "m.unit_cost, m.vendor_id, v.name AS vendor_name " +
-                     "FROM Material m " +
-                     "LEFT JOIN Vendor v ON m.vendor_id = v.vendor_id " +
-                     "WHERE m.name LIKE ? OR m.category LIKE ? " +
+                 "m.unit_cost, m.vendor_id, v.name AS vendor_name " +
+                 "FROM material m " +
+                 "LEFT JOIN vendor v ON m.vendor_id = v.vendor_id " +
+                 "WHERE m.name ILIKE ? OR m.category ILIKE ? " +
                      "ORDER BY m.name";
         
         try (Connection conn = DBConnection.getConnection();

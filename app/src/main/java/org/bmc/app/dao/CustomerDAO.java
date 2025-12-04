@@ -23,26 +23,26 @@ public class CustomerDAO {
     
     // SQL Queries
     private static final String INSERT_SQL = 
-        "INSERT INTO Customer (name, contact_name, phone, email, address) VALUES (?, ?, ?, ?, ?)";
+        "INSERT INTO customer (name, contact_name, phone, email, address) VALUES (?, ?, ?, ?, ?)";
     
     private static final String SELECT_BY_ID_SQL = 
-        "SELECT customer_id, name, contact_name, phone, email, address FROM Customer WHERE customer_id = ?";
+        "SELECT customer_id, name, contact_name, phone, email, address FROM customer WHERE customer_id = ?";
     
     private static final String SELECT_ALL_SQL = 
-        "SELECT customer_id, name, contact_name, phone, email, address FROM Customer ORDER BY name";
+        "SELECT customer_id, name, contact_name, phone, email, address FROM customer ORDER BY name";
     
     private static final String UPDATE_SQL = 
-        "UPDATE Customer SET name = ?, contact_name = ?, phone = ?, email = ?, address = ? WHERE customer_id = ?";
+        "UPDATE customer SET name = ?, contact_name = ?, phone = ?, email = ?, address = ? WHERE customer_id = ?";
     
     private static final String DELETE_SQL = 
-        "DELETE FROM Customer WHERE customer_id = ?";
+        "DELETE FROM customer WHERE customer_id = ?";
     
     private static final String SEARCH_BY_NAME_SQL = 
-        "SELECT customer_id, name, contact_name, phone, email, address FROM Customer " +
-        "WHERE name LIKE ? ORDER BY name";
+        "SELECT customer_id, name, contact_name, phone, email, address FROM customer " +
+        "WHERE name ILIKE ? ORDER BY name";
     
     private static final String COUNT_JOBS_SQL = 
-        "SELECT COUNT(*) FROM Job WHERE customer_id = ?";
+        "SELECT COUNT(*) FROM job WHERE customer_id = ?";
     
     /**
      * Creates a new customer in the database

@@ -24,76 +24,76 @@ public class InvoiceDAO {
     
     // SQL Queries
     private static final String INSERT_SQL = 
-        "INSERT INTO Invoice (job_id, invoice_date, total_amount, paid) VALUES (?, ?, ?, ?)";
+        "INSERT INTO invoice (job_id, invoice_date, total_amount, paid) VALUES (?, ?, ?, ?)";
     
     private static final String SELECT_BY_ID_SQL = 
         "SELECT i.invoice_id, i.job_id, i.invoice_date, i.total_amount, i.paid, " +
         "j.description as job_description, c.name as customer_name " +
-        "FROM Invoice i " +
-        "LEFT JOIN Job j ON i.job_id = j.job_id " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
+        "FROM invoice i " +
+        "LEFT JOIN job j ON i.job_id = j.job_id " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
         "WHERE i.invoice_id = ?";
     
     private static final String SELECT_ALL_SQL = 
         "SELECT i.invoice_id, i.job_id, i.invoice_date, i.total_amount, i.paid, " +
         "j.description as job_description, c.name as customer_name " +
-        "FROM Invoice i " +
-        "LEFT JOIN Job j ON i.job_id = j.job_id " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
+        "FROM invoice i " +
+        "LEFT JOIN job j ON i.job_id = j.job_id " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
         "ORDER BY i.invoice_date DESC";
     
     private static final String UPDATE_SQL = 
-        "UPDATE Invoice SET job_id = ?, invoice_date = ?, total_amount = ?, paid = ? WHERE invoice_id = ?";
+        "UPDATE invoice SET job_id = ?, invoice_date = ?, total_amount = ?, paid = ? WHERE invoice_id = ?";
     
     private static final String DELETE_SQL = 
-        "DELETE FROM Invoice WHERE invoice_id = ?";
+        "DELETE FROM invoice WHERE invoice_id = ?";
     
     private static final String SELECT_BY_JOB_SQL = 
         "SELECT i.invoice_id, i.job_id, i.invoice_date, i.total_amount, i.paid, " +
         "j.description as job_description, c.name as customer_name " +
-        "FROM Invoice i " +
-        "LEFT JOIN Job j ON i.job_id = j.job_id " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
+        "FROM invoice i " +
+        "LEFT JOIN job j ON i.job_id = j.job_id " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
         "WHERE i.job_id = ? ORDER BY i.invoice_date";
     
     private static final String SELECT_BY_PAYMENT_STATUS_SQL = 
         "SELECT i.invoice_id, i.job_id, i.invoice_date, i.total_amount, i.paid, " +
         "j.description as job_description, c.name as customer_name " +
-        "FROM Invoice i " +
-        "LEFT JOIN Job j ON i.job_id = j.job_id " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
+        "FROM invoice i " +
+        "LEFT JOIN job j ON i.job_id = j.job_id " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
         "WHERE i.paid = ? ORDER BY i.invoice_date";
     
     private static final String SELECT_OVERDUE_SQL = 
         "SELECT i.invoice_id, i.job_id, i.invoice_date, i.total_amount, i.paid, " +
         "j.description as job_description, c.name as customer_name " +
-        "FROM Invoice i " +
-        "LEFT JOIN Job j ON i.job_id = j.job_id " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
-        "WHERE i.paid = FALSE AND DATEDIFF(CURDATE(), i.invoice_date) > 30 " +
+        "FROM invoice i " +
+        "LEFT JOIN job j ON i.job_id = j.job_id " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
+        "WHERE i.paid = FALSE AND (CURRENT_DATE - i.invoice_date) > 30 " +
         "ORDER BY i.invoice_date";
     
     private static final String SELECT_AGING_REPORT_SQL = 
         "SELECT i.invoice_id, i.job_id, i.invoice_date, i.total_amount, i.paid, " +
         "j.description as job_description, c.name as customer_name, " +
-        "DATEDIFF(CURDATE(), i.invoice_date) as days_outstanding " +
-        "FROM Invoice i " +
-        "LEFT JOIN Job j ON i.job_id = j.job_id " +
-        "LEFT JOIN Customer c ON j.customer_id = c.customer_id " +
+        "(CURRENT_DATE - i.invoice_date) as days_outstanding " +
+        "FROM invoice i " +
+        "LEFT JOIN job j ON i.job_id = j.job_id " +
+        "LEFT JOIN customer c ON j.customer_id = c.customer_id " +
         "WHERE i.paid = FALSE " +
         "ORDER BY days_outstanding DESC";
     
     private static final String SELECT_BY_CUSTOMER_SQL = 
         "SELECT i.invoice_id, i.job_id, i.invoice_date, i.total_amount, i.paid, " +
         "j.description as job_description, c.name as customer_name " +
-        "FROM Invoice i " +
-        "JOIN Job j ON i.job_id = j.job_id " +
-        "JOIN Customer c ON j.customer_id = c.customer_id " +
+        "FROM invoice i " +
+        "JOIN job j ON i.job_id = j.job_id " +
+        "JOIN customer c ON j.customer_id = c.customer_id " +
         "WHERE c.customer_id = ? ORDER BY i.invoice_date DESC";
     
     
     private static final String COUNT_PAYMENTS_SQL = 
-        "SELECT COUNT(*) FROM Payment WHERE invoice_id = ?";
+        "SELECT COUNT(*) FROM payment WHERE invoice_id = ?";
     
     /**
      * Creates a new invoice in the database
